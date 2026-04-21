@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Commerce Consumer Behavior Dashboard 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #12122a;
+            --bg-card: #1a1a3e;
+            --bg-card-hover: #222255;
+            --accent-blue: #4f8cff;
+            --accent-purple: #7b5cff;
+            --accent-cyan: #00d4ff;
+            --accent-green: #00e5a0;
+            --accent-orange: #ff8c42;
+            --accent-red: #ff4757;
+            --accent-yellow: #ffd700;
+            --accent-pink: #ff6b9d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --text-muted: #6b6b8d;
+            --border-color: #2a2a5a;
+            --gradient-1: linear-gradient(135deg, #4f8cff, #7b5cff);
+            --gradient-2: linear-gradient(135deg, #00e5a0, #00d4ff);
+            --gradient-3: linear-gradient(135deg, #ff8c42, #ff4757);
+            --gradient-4: linear-gradient(135deg, #ffd700, #ff8c42);
+            --gradient-5: linear-gradient(135deg, #ff6b9d, #7b5cff);
+            --shadow-glow: 0 0 30px rgba(79, 140, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(79, 140, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(123, 92, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(0, 213, 255, 0.05) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(79, 140, 255, 0.3);
+            border-radius: 50%;
+            animation: float-particle 15s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(79, 140, 255, 0.15);
+            border: 1px solid rgba(79, 140, 255, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 213, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 213, 255, 0.4); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #a0a0c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.05em;
+            font-weight: 400;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-group select {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .filter-group select:hover,
+        .filter-group select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(79, 140, 255, 0.2);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .kpi-card:nth-child(1)::before { background: var(--gradient-1); }
+        .kpi-card:nth-child(2)::before { background: var(--gradient-2); }
+        .kpi-card:nth-child(3)::before { background: var(--gradient-3); }
+        .kpi-card:nth-child(4)::before { background: var(--gradient-4); }
+        .kpi-card:nth-child(5)::before { background: var(--gradient-5); }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card:nth-child(1) .kpi-icon { background: rgba(79, 140, 255, 0.15); }
+        .kpi-card:nth-child(2) .kpi-icon { background: rgba(0, 229, 160, 0.15); }
+        .kpi-card:nth-child(3) .kpi-icon { background: rgba(255, 71, 87, 0.15); }
+        .kpi-card:nth-child(4) .kpi-icon { background: rgba(255, 215, 0, 0.15); }
+        .kpi-card:nth-child(5) .kpi-icon { background: rgba(255, 107, 157, 0.15); }
+
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .kpi-card:nth-child(1) .kpi-value { color: var(--accent-blue); }
+        .kpi-card:nth-child(2) .kpi-value { color: var(--accent-green); }
+        .kpi-card:nth-child(3) .kpi-value { color: var(--accent-red); }
+        .kpi-card:nth-child(4) .kpi-value { color: var(--accent-yellow); }
+        .kpi-card:nth-child(5) .kpi-value { color: var(--accent-pink); }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .kpi-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .kpi-change.positive {
+            background: rgba(0, 229, 160, 0.1);
+            color: var(--accent-green);
+        }
+
+        .kpi-change.negative {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--accent-red);
+        }
+
+        /* Chart Grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 28px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-card:hover {
+            border-color: rgba(79, 140, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-card.full-width {
+            grid-column: span 2;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .chart-badge {
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-blue { background: rgba(79, 140, 255, 0.15); color: var(--accent-blue); }
+        .badge-green { background: rgba(0, 229, 160, 0.15); color: var(--accent-green); }
+        .badge-orange { background: rgba(255, 140, 66, 0.15); color: var(--accent-orange); }
+        .badge-purple { background: rgba(123, 92, 255, 0.15); color: var(--accent-purple); }
+        .badge-red { background: rgba(255, 71, 87, 0.15); color: var(--accent-red); }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+        }
+
+        .chart-container.tall {
+            height: 380px;
+        }
+
+        /* Insights Section */
+        .insights-section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .insight-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .insight-card:nth-child(1)::before { background: var(--accent-blue); }
+        .insight-card:nth-child(2)::before { background: var(--accent-green); }
+        .insight-card:nth-child(3)::before { background: var(--accent-orange); }
+        .insight-card:nth-child(4)::before { background: var(--accent-purple); }
+        .insight-card:nth-child(5)::before { background: var(--accent-cyan); }
+        .insight-card:nth-child(6)::before { background: var(--accent-pink); }
+
+        .insight-number {
+            font-size: 42px;
+            font-weight: 900;
+            opacity: 0.08;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .insight-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .insight-title {
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .insight-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .insight-metric {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .insight-metric-value {
+            font-size: 1.8em;
+            font-weight: 800;
+        }
+
+        .insight-metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Segment Cards */
+        .segment-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .segment-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .segment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .segment-emoji {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .segment-name {
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .segment-pct {
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .segment-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Pain Point Bars */
+        .pain-bar-container {
+            margin-bottom: 16px;
+        }
+
+        .pain-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .pain-bar-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .pain-bar-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .pain-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .pain-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .comparison-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(79, 140, 255, 0.05);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Tooltip custom */
+        .tooltip-custom {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* Counter Animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+            .insights-grid { grid-template-columns: repeat(2, 1fr); }
+            .segment-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .chart-grid { grid-template-columns: 1fr; }
+            .chart-card.full-width { grid-column: span 1; }
+            .insights-grid { grid-template-columns: 1fr; }
+            .segment-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .header h1 { font-size: 1.8em; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* NPS Gauge */
+        .nps-gauge-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .nps-gauge {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .nps-value-display {
+            font-size: 3em;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .nps-label-display {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .nps-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .nps-segment {
+            text-align: center;
+        }
+
+        .nps-segment-value {
+            font-size: 1.5em;
+            font-weight: 800;
+        }
+
+        .nps-segment-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Download Button */
+        .download-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 24px;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(79, 140, 255, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(79, 140, 255, 0.6);
+        }
+
+        /* Tab System */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 140, 255, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Word Cloud Simulation */
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .word-item {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .word-item:hover {
+            transform: scale(1.15);
+        }
+
+        /* Progress Ring */
+        .progress-ring-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+        }
+
+        .ring-item {
+            text-align: center;
+        }
+
+        .ring-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        .ring-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header animate-in">
+            <div class="header-badge">📡 LIVE DASHBOARD</div>
+            <h1>🚀 Quick Commerce Consumer Behavior</h1>
+            <p>Primary Research Survey Analysis — 47 Respondents | India 2024</p>
+        </header>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar animate-in delay-1">
+            <div class="filter-group">
+                <label>🎯 Age Group</label>
+                <select id="filterAge" onchange="updateDashboard()">
+                    <option value="all">All Ages</option>
+                    <option value="18-24">18-24 years</option>
+                    <option value="25-34">25-34 years</option>
+                    <option value="35-44">35-44 years</option>
+                    <option value="55+">55+ years</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>👤 Occupation</label>
+                <select id="filterOccupation" onchange="updateDashboard()">
+                    <option value="all">All Occupations</option>
+                    <option value="student">Student</option>
+                    <option value="professional">Working Professional</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>📱 App</label>
+                <select id="filterApp" onchange="updateDashboard()">
+                    <option value="all">All Apps</option>
+                    <option value="blinkit">Blinkit</option>
+                    <option value="zepto">Zepto</option>
+                    <option value="instamart">Instamart</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>📊 View Mode</label>
+                <select id="filterMode">
+                    <option value="overview">Overview</option>
+                    <option value="detailed">Detailed</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container animate-in delay-2">
+            <button class="tab-btn active" onclick="switchTab('overview')">📊 Overview</button>
+            <button class="tab-btn" onclick="switchTab('behavior')">🛒 Behavior</button>
+            <button class="tab-btn" onclick="switchTab('satisfaction')">⭐ Satisfaction</button>
+            <button class="tab-btn" onclick="switchTab('segments')">👥 Segments</button>
+            <button class="tab-btn" onclick="switchTab('insights')">💡 Key Insights</button>
+        </div>
+
+        <!-- ==================== OVERVIEW TAB ==================== -->
+        <div class="tab-content active" id="tab-overview">
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid animate-in delay-2">
+                <div class="kpi-card">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-value" id="kpi-total">47</div>
+                    <div class="kpi-label">Total Respondents</div>
+                    <div class="kpi-change positive">✓ Complete Data</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🏆</div>
+                    <div class="kpi-value" id="kpi-topapp">Blinkit</div>
+                    <div class="kpi-label">Most Used App (51%)</div>
+                    <div class="kpi-change positive">▲ 24 users</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">📈</div>
+                    <div class="kpi-value" id="kpi-nps">+27</div>
+                    <div class="kpi-label">NPS Score</div>
+                    <div class="kpi-change positive">▲ Good</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-value" id="kpi-spend">₹1.5K</div>
+                    <div class="kpi-label">Avg Monthly Spend</div>
+                    <div class="kpi-change positive">Modal Range</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">😊</div>
+                    <div class="kpi-value" id="kpi-sat">72%</div>
+                    <div class="kpi-label">Satisfaction Rate</div>
+                    <div class="kpi-change negative">⚠ 47% Passive</div>
+                </div>
+            </div>
+
+            <!-- Main Charts Row -->
+            <div class="chart-grid">
+                <!-- App Market Share -->
+                <div class="chart-card animate-in delay-3">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📱 App Market Share</div>
+                            <div class="chart-subtitle">Most frequently used quick commerce app</div>
+                        </div>
+                        <span class="chart-badge badge-blue">DISTRIBUTION</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="appShareChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Decision Factors -->
+                <div class="chart-card animate-in delay-4">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">🎯 Primary Decision Factors</div>
+                            <div class="chart-subtitle">Single most important factor when choosing an app</div>
+                        </div>
+                        <span class="chart-badge badge-green">RANKING</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="factorsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Monthly Spending -->
+                <div class="chart-card animate-in delay-3">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">💰 Monthly Spending Distribution</div>
+                            <div class="chart-subtitle">Estimated total monthly spend on quick commerce</div>
+                        </div>
+                        <span class="chart-badge badge-orange">SPENDING</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="spendingChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Order Frequency -->
+                <div class="chart-card animate-in delay-4">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📅 Order Frequency</div>
+                            <div class="chart-subtitle">How often users place orders</div>
+                        </div>
+                        <span class="chart-badge badge-purple">FREQUENCY</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="frequencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BEHAVIOR TAB ==================== -->
+        <div class="tab-content" id="tab-behavior">
+            <div class="chart-grid">
+                <!-- Factor Importance Ratings -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">⭐ Factor Importance Ratings</div>
+                            <div class="chart-subtitle">Average importance score (1-5) for each factor</div>
+                        </div>
+                        <span class="chart-badge badge-blue">RATINGS</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="importanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Order Value Distribution -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">🧾 Average Order Value</div>
+                            <div class="chart-subtitle">Typical per-transaction spend</div>
+                        </div>
+                        <span class="chart-badge badge-green">AOV</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="aovChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Frequency vs Spending -->
+                <div class="chart-card full-width animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📊 Frequency vs Monthly Spending</div>
+                            <div class="chart-subtitle">Correlation between order frequency and total spend</div>
+                        </div>
+                        <span class="chart-badge badge-purple">CORRELATION</span>
+                    </div>
+                    <div class="chart-container tall">
+                        <canvas id="freqSpendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Student vs Professional -->
+                <div class="chart-card full-width animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">👨‍🎓 vs 👨‍💼 Student vs Working Professional</div>
+                            <div class="chart-subtitle">Behavioral comparison across key metrics</div>
+                        </div>
+                        <span class="chart-badge badge-orange">COMPARISON</span>
+                    </div>
+                    <div class="chart-container tall">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SATISFACTION TAB ==================== -->
+        <div class="tab-content" id="tab-satisfaction">
+            <div class="chart-grid">
+                <!-- Satisfaction Distribution -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">😊 Satisfaction Distribution</div>
+                            <div class="chart-subtitle">Overall satisfaction levels</div>
+                        </div>
+                        <span class="chart-badge badge-green">SATISFACTION</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="satisfactionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- NPS Distribution -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📊 NPS Score Breakdown</div>
+                            <div class="chart-subtitle">Net Promoter Score distribution (1-7)</div>
+                        </div>
+                        <span class="chart-badge badge-blue">NPS +27</span>
+                    </div>
+                    <div class="nps-gauge-container">
+                        <div class="nps-value-display" style="color: var(--accent-green);">+27</div>
+                        <div class="nps-label-display">Net Promoter Score</div>
+                        <div class="nps-breakdown">
+                            <div class="nps-segment">
+                                <div class="nps-segment-value" style="color: var(--accent-green);">40%</div>
+                                <div class="nps-segment-label">Promoters</div>
+                            </div>
+                            <div class="nps-segment">
+                                <div class="nps-segment-value" style="color: var(--accent-yellow);">47%</div>
+                                <div class="nps-segment-label">Passives</div>
+                            </div>
+                            <div class="nps-segment">
+                                <div class="nps-segment-value" style="color: var(--accent-red);">13%</div>
+                                <div class="nps-segment-label">Detractors</div>
+                            </div>
+                        </div>
+                        <div class="chart-container" style="height: 200px; margin-top: 20px;">
+                            <canvas id="npsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pain Points -->
+                <div class="chart-card full-width animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">🔥 Consumer Pain Points</div>
+                            <div class="chart-subtitle">Biggest problems faced by quick commerce users</div>
+                        </div>
+                        <span class="chart-badge badge-red">PAIN POINTS</span>
+                    </div>
+                    <div style="padding: 20px 0;">
+                        <div class="pain-bar-container">
+                            <div class="pain-bar-header">
+                                <span class="pain-bar-label">💸 High prices vs local stores</span>
+                                <span class="pain-bar-value">38% (18 users)</span>
+                            </div>
+                            <div class="pain-bar">
+                                <div class="pain-bar-fill" style="background: var(--gradient-3);" data-width="82%"></div>
+                            </div>
+                        </div>
+                        <div class="pain-bar-container">
+                            <div class="pain-bar-header">
+                                <span class="pain-bar-label">📦 Limited availability / Out of stock</span>
+                                <span class="pain-bar-value">34% (16 users)</span>
+                            </div>
+                            <div class="pain-bar">
+                                <div class="pain-bar-fill" style="background: var(--gradient-4);" data-width="73%"></div>
+                            </div>
+                        </div>
+                        <div class="pain-bar-container">
+                            <div class="pain-bar-header">
+                                <span class="pain-bar-label">⚠️ Product quality issues</span>
+                                <span class="pain-bar-value">11% (5 users)</span>
+                            </div>
+                            <div class="pain-bar">
+                                <div class="pain-bar-fill" style="background: var(--gradient-5);" data-width="23%"></div>
+                            </div>
+                        </div>
+                        <div class="pain-bar-container">
+                            <div class="pain-bar-header">
+                                <span class="pain-bar-label">🕐 Late / inconsistent delivery</span>
+                                <span class="pain-bar-value">11% (5 users)</span>
+                            </div>
+                            <div class="pain-bar">
+                                <div class="pain-bar-fill" style="background: linear-gradient(135deg, #00d4ff, #4f8cff);" data-width="23%"></div>
+                            </div>
+                        </div>
+                        <div class="pain-bar-container">
+                            <div class="pain-bar-header">
+                                <span class="pain-bar-label">📞 Poor customer service</span>
+                                <span class="pain-bar-value">6% (3 users)</span>
+                            </div>
+                            <div class="pain-bar">
+                                <div class="pain-bar-fill" style="background: linear-gradient(135deg, #a0a0c0, #6b6b8d);" data-width="14%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Cloud -->
+                <div class="chart-card full-width animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">💬 What Would Make Users Switch?</div>
+                            <div class="chart-subtitle">Themes from open-ended responses</div>
+                        </div>
+                        <span class="chart-badge badge-purple">QUALITATIVE</span>
+                    </div>
+                    <div class="word-cloud">
+                        <span class="word-item" style="font-size: 28px; background: rgba(255, 71, 87, 0.2); color: #ff4757;">Lower Prices</span>
+                        <span class="word-item" style="font-size: 24px; background: rgba(255, 140, 66, 0.2); color: #ff8c42;">Zero Delivery Fee</span>
+                        <span class="word-item" style="font-size: 22px; background: rgba(0, 229, 160, 0.2); color: #00e5a0;">Better Availability</span>
+                        <span class="word-item" style="font-size: 20px; background: rgba(79, 140, 255, 0.2); color: #4f8cff;">More Discounts</span>
+                        <span class="word-item" style="font-size: 18px; background: rgba(123, 92, 255, 0.2); color: #7b5cff;">Product Quality</span>
+                        <span class="word-item" style="font-size: 26px; background: rgba(0, 213, 255, 0.2); color: #00d4ff;">No Min Order</span>
+                        <span class="word-item" style="font-size: 16px; background: rgba(255, 107, 157, 0.2); color: #ff6b9d;">AI Comparison</span>
+                        <span class="word-item" style="font-size: 19px; background: rgba(255, 215, 0, 0.2); color: #ffd700;">Transparent Pricing</span>
+                        <span class="word-item" style="font-size: 17px; background: rgba(0, 229, 160, 0.2); color: #00e5a0;">Medicine Delivery</span>
+                        <span class="word-item" style="font-size: 21px; background: rgba(255, 71, 87, 0.2); color: #ff4757;">Less Surge Charges</span>
+                        <span class="word-item" style="font-size: 15px; background: rgba(79, 140, 255, 0.2); color: #4f8cff;">Quick Delivery</span>
+                        <span class="word-item" style="font-size: 18px; background: rgba(123, 92, 255, 0.2); color: #7b5cff;">More Variety</span>
+                        <span class="word-item" style="font-size: 16px; background: rgba(0, 213, 255, 0.2); color: #00d4ff;">Local Shop Support</span>
+                        <span class="word-item" style="font-size: 20px; background: rgba(255, 140, 66, 0.2); color: #ff8c42;">Upfront Final Amount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEGMENTS TAB ==================== -->
+        <div class="tab-content" id="tab-segments">
+            <div class="segment-grid animate-in">
+                <div class="segment-card" style="border-left: 4px solid var(--accent-blue);">
+                    <div class="segment-emoji">💰</div>
+                    <div class="segment-name">Budget Hunters</div>
+                    <div class="segment-pct" style="color: var(--accent-blue);">~35%</div>
+                    <div class="segment-desc">Students, 18-24, price & discount driven. AOV &lt;₹500. High frequency, low ticket. Chase deals actively.</div>
+                </div>
+                <div class="segment-card" style="border-left: 4px solid var(--accent-green);">
+                    <div class="segment-emoji">⚡</div>
+                    <div class="segment-name">Convenience Maximizers</div>
+                    <div class="segment-pct" style="color: var(--accent-green);">~25%</div>
+                    <div class="segment-desc">Working professionals, speed & variety driven. AOV ₹200-800. Value time over money.</div>
+                </div>
+                <div class="segment-card" style="border-left: 4px solid var(--accent-yellow);">
+                    <div class="segment-emoji">🌟</div>
+                    <div class="segment-name">Quality Seekers</div>
+                    <div class="segment-pct" style="color: var(--accent-yellow);">~15%</div>
+                    <div class="segment-desc">Mixed demographics, product freshness matters most. Will switch after one bad experience.</div>
+                </div>
+                <div class="segment-card" style="border-left: 4px solid var(--accent-pink);">
+                    <div class="segment-emoji">🛒</div>
+                    <div class="segment-name">Power Shoppers</div>
+                    <div class="segment-pct" style="color: var(--accent-pink);">~12%</div>
+                    <div class="segment-desc">25-44 age, daily users, AOV &gt;₹800. Monthly spend &gt;₹3,000. Highest CLV segment.</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <!-- Segment Behavior -->
+                <div class="chart-card full-width animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📊 Segment Comparison Matrix</div>
+                            <div class="chart-subtitle">Key metrics across consumer segments</div>
+                        </div>
+                        <span class="chart-badge badge-purple">SEGMENTS</span>
+                    </div>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Segment</th>
+                                <th>Primary App</th>
+                                <th>Top Factor</th>
+                                <th>Avg AOV</th>
+                                <th>Monthly Spend</th>
+                                <th>NPS Range</th>
+                                <th>Top Pain Point</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="status-dot" style="background: var(--accent-blue);"></span>Budget Hunters</td>
+                                <td>Blinkit / Zepto</td>
+                                <td>Price & Offers</td>
+                                <td>₹200-500</td>
+                                <td>₹500-1,500</td>
+                                <td>4-5</td>
+                                <td>High prices</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-dot" style="background: var(--accent-green);"></span>Convenience Max</td>
+                                <td>Blinkit</td>
+                                <td>Speed & Variety</td>
+                                <td>₹200-800</td>
+                                <td>₹1,500-3,000</td>
+                                <td>5-6</td>
+                                <td>Availability</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-dot" style="background: var(--accent-yellow);"></span>Quality Seekers</td>
+                                <td>Blinkit / Instamart</td>
+                                <td>Quality/Freshness</td>
+                                <td>₹500-800</td>
+                                <td>₹1,500-3,000</td>
+                                <td>5</td>
+                                <td>Product quality</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-dot" style="background: var(--accent-pink);"></span>Power Shoppers</td>
+                                <td>Blinkit (loyal)</td>
+                                <td>Variety</td>
+                                <td>>₹800</td>
+                                <td>>₹3,000</td>
+                                <td>6-7</td>
+                                <td>Availability</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- App Preference by Occupation -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">📱 App Preference by Occupation</div>
+                            <div class="chart-subtitle">Student vs Professional app choice</div>
+                        </div>
+                        <span class="chart-badge badge-blue">CROSS-TAB</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="appOccChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pain Point by App -->
+                <div class="chart-card animate-in">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">🔥 Pain Points by App</div>
+                            <div class="chart-subtitle">Which app faces which complaints</div>
+                        </div>
+                        <span class="chart-badge badge-red">APP ANALYSIS</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="painAppChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== INSIGHTS TAB ==================== -->
+        <div class="tab-content" id="tab-insights">
+            <div class="insights-section">
+                <div class="section-header">
+                    <h2>💡 Key Insights</h2>
+                    <div class="line"></div>
+                </div>
+
+                <div class="insights-grid">
+                    <div class="insight-card animate-in delay-1">
+                        <div class="insight-number">01</div>
+                        <div class="insight-tag badge-blue">MARKET SHARE</div>
+                        <div class="insight-title">Blinkit Leads, Zepto Closes Fast</div>
+                        <div class="insight-text">Blinkit holds 51% share driven by variety. Zepto captures 34% with price-conscious users. Instamart at just 6% — Swiggy's cross-sell opportunity missed.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-blue);">51%</span>
+                            <span class="insight-metric-label">Blinkit dominance</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card animate-in delay-2">
+                        <div class="insight-number">02</div>
+                        <div class="insight-tag badge-green">DECISION FACTOR</div>
+                        <div class="insight-title">Price Is King — Speed Is Overrated</div>
+                        <div class="insight-text">36% choose apps based on price, only 15% on speed. The 10-minute delivery war? Consumers don't care as much as companies think.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-green);">36%</span>
+                            <span class="insight-metric-label">choose price first</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card animate-in delay-3">
+                        <div class="insight-number">03</div>
+                        <div class="insight-tag badge-orange">PARADOX</div>
+                        <div class="insight-title">The "Satisfied But Frustrated" Paradox</div>
+                        <div class="insight-text">72% are satisfied yet 72% report major pain points. Users settle for "good enough" — they're not loyal, just lacking alternatives.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-orange);">72%</span>
+                            <span class="insight-metric-label">dual paradox rate</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card animate-in delay-4">
+                        <div class="insight-number">04</div>
+                        <div class="insight-tag badge-red">THREAT</div>
+                        <div class="insight-title">Kirana Store Is The Real Competitor</div>
+                        <div class="insight-text">38% cite "high prices vs local stores" — users mentally benchmark every purchase against neighborhood shops. Convenience premium has a limit.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-red);">38%</span>
+                            <span class="insight-metric-label">price-sensitive users</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card animate-in delay-5">
+                        <div class="insight-number">05</div>
+                        <div class="insight-tag badge-purple">GAP</div>
+                        <div class="insight-title">Blinkit's Expectation-Reality Gap</div>
+                        <div class="insight-text">Users choose Blinkit for variety but complain about stockouts. The promise vs delivery mismatch creates higher disappointment than competitors.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-purple);">34%</span>
+                            <span class="insight-metric-label">cite availability issues</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card animate-in delay-6">
+                        <div class="insight-number">06</div>
+                        <div class="insight-tag" style="background: rgba(0, 213, 255, 0.15); color: var(--accent-cyan);">HIDDEN</div>
+                        <div class="insight-title">Daily Users ≠ Homogeneous Group</div>
+                        <div class="insight-text">Daily users have the widest spending variance (₹200 to ₹1,200 AOV). Two distinct sub-segments hidden under "power user" label — essentials buyers vs grocery consolidators.</div>
+                        <div class="insight-metric">
+                            <span class="insight-metric-value" style="color: var(--accent-cyan);">6x</span>
+                            <span class="insight-metric-label">spend variance in daily users</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Recommendations -->
+            <div class="insights-section">
+                <div class="section-header">
+                    <h2>🎯 Business Recommendations</h2>
+                    <div class="line"></div>
+                </div>
+
+                <div class="insights-grid">
+                    <div class="insight-card animate-in" style="border: 1px solid rgba(255, 215, 0, 0.3);">
+                        <div class="insight-tag badge-orange">FOR BLINKIT</div>
+                        <div class="insight-title">Fix Availability Before It Becomes Churn</div>
+                        <div class="insight-text">Implement real-time "availability promise" + predictive inventory. Your users choose you for variety — stockouts break trust irreversibly.</div>
+                    </div>
+                    <div class="insight-card animate-in" style="border: 1px solid rgba(123, 92, 255, 0.3);">
+                        <div class="insight-tag badge-purple">FOR ZEPTO</div>
+                        <div class="insight-title">Launch "Local Price Match" for 50 Essentials</div>
+                        <div class="insight-text">Price daily essentials within 5% of kirana rates. Absorb margin, recover through impulse add-ons. Convert bi-weekly users to daily.</div>
+                    </div>
+                    <div class="insight-card animate-in" style="border: 1px solid rgba(0, 229, 160, 0.3);">
+                        <div class="insight-tag badge-green">FOR ALL APPS</div>
+                        <div class="insight-title">Micro-Loyalty: Reward Habits, Not Spend</div>
+                        <div class="insight-text">47% are passives. Streak-based loyalty (3-day, 7-day bonuses) borrowed from gaming psychology can convert passive → promoter.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>📊 Quick Commerce Consumer Behavior Dashboard | Primary Research Survey 2024 | 47 Respondents</p>
+            <p style="margin-top: 8px; font-size: 11px;">Built with Chart.js • Designed for analytical storytelling • © 2024</p>
+        </div>
+    </div>
+
+    <!-- Download Button -->
+    <button class="download-btn" onclick="downloadDashboard()">
+        📥 Download Report
+    </button>
+
+    <script>
+        // ==================== PARTICLES ====================
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 20) + 's';
+            particle.style.width = (2 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `rgba(${79 + Math.random() * 100}, ${140 + Math.random() * 50}, 255, ${0.1 + Math.random() * 0.3})`;
+            particlesContainer.appendChild(particle);
+        }
+
+        // ==================== TAB SYSTEM ====================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Trigger pain bar animation
+            if (tabName === 'satisfaction') {
+                setTimeout(animatePainBars, 300);
+            }
+
+            // Re-render charts for the active tab
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 100);
+        }
+
+        // ==================== CHART DEFAULTS ====================
+        Chart.defaults.color = '#a0a0c0';
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.font.weight = 500;
+        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+        Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
+        Chart.defaults.plugins.legend.labels.padding = 20;
+
+        // ==================== COLOR PALETTES ====================
+        const appColors = {
+            'Blinkit': '#ffd700',
+            'Zepto': '#7b5cff',
+            'Instamart': '#ff6600',
+            'None': '#6b6b8d',
+            'Other': '#00d4ff'
+        };
+
+        const gradientColors = ['#4f8cff', '#7b5cff', '#00e5a0', '#ff8c42', '#ff4757', '#ffd700', '#00d4ff', '#ff6b9d'];
+
+        function createGradient(ctx, color1, color2, vertical = true) {
+            const gradient = vertical ?
+                ctx.createLinearGradient(0, 0, 0, 400) :
+                ctx.createLinearGradient(0, 0, 400, 0);
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(1, color2);
+            return gradient;
+        }
+
+        // ==================== 1. APP MARKET SHARE (Doughnut) ====================
+        const appShareCtx = document.getElementById('appShareChart').getContext('2d');
+        new Chart(appShareCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Blinkit', 'Zepto', 'Instamart', 'None', 'Other'],
+                datasets: [{
+                    data: [24, 16, 3, 2, 2],
+                    backgroundColor: [
+                        '#ffd700',
+                        '#7b5cff',
+                        '#ff6600',
+                        '#6b6b8d',
+                        '#00d4ff'
+                    ],
+                    borderWidth: 0,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#fff',
+                    borderRadius: 6,
+                    spacing: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 13, weight: 600 }, padding: 16 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        titleFont: { size: 14, weight: 700 },
+                        bodyFont: { size: 13 },
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = ((context.parsed / total) * 100).toFixed(1);
+                                return ` ${context.label}: ${context.parsed} users (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // ==================== 2. DECISION FACTORS (Horizontal Bar) ====================
+        const factorsCtx = document.getElementById('factorsChart').getContext('2d');
+        new Chart(factorsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Price of Products', 'Variety/Availability', 'Offers & Discounts', 'Delivery Speed'],
+                datasets: [{
+                    label: 'Responses',
+                    data: [17, 12, 10, 7],
+                    backgroundColor: [
+                        createGradient(factorsCtx, '#4f8cff', '#2563eb'),
+                        createGradient(factorsCtx, '#00e5a0', '#00b07d'),
+                        createGradient(factorsCtx, '#ff8c42', '#e06520'),
+                        createGradient(factorsCtx, '#7b5cff', '#5b3cdf')
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 10,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14,
+                        callbacks: {
+                            label: function(context) {
+                                const pct = ((context.parsed.x / 47) * 100).toFixed(1);
+                                return ` ${context.parsed.x} responses (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 13, weight: 600 } }
+                    }
+                }
+            }
+        });
+
+        // ==================== 3. MONTHLY SPENDING (Bar) ====================
+        const spendingCtx = document.getElementById('spendingChart').getContext('2d');
+        const spendGrad = createGradient(spendingCtx, 'rgba(0, 229, 160, 0.8)', 'rgba(0, 229, 160, 0.2)');
+        new Chart(spendingCtx, {
+            type: 'bar',
+            data: {
+                labels: ['< ₹500', '₹500-1.5K', '₹1.5K-3K', '₹3K-5K', '> ₹5K'],
+                datasets: [{
+                    label: 'Users',
+                    data: [5, 18, 15, 3, 6],
+                    backgroundColor: [
+                        'rgba(79, 140, 255, 0.7)',
+                        'rgba(0, 229, 160, 0.7)',
+                        'rgba(255, 140, 66, 0.7)',
+                        'rgba(123, 92, 255, 0.7)',
+                        'rgba(255, 71, 87, 0.7)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 10,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#00e5a0',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14,
+                        callbacks: {
+                            label: function(context) {
+                                const pct = ((context.parsed.y / 47) * 100).toFixed(1);
+                                return ` ${context.parsed.y} users (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12, weight: 600 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // ==================== 4. ORDER FREQUENCY (Doughnut) ====================
+        const freqCtx = document.getElementById('frequencyChart').getContext('2d');
+        new Chart(freqCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Daily (4+/week)', 'Weekly (1-3/week)', 'Bi-Weekly (2-3/month)', 'Monthly/Rarely'],
+                datasets: [{
+                    data: [9, 15, 11, 8],
+                    backgroundColor: ['#ff4757', '#4f8cff', '#ffd700', '#00e5a0'],
+                    borderWidth: 0,
+                    borderRadius: 6,
+                    spacing: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 11, weight: 600 }, padding: 12 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#7b5cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                }
+            }
+        });
+
+        // ==================== 5. FACTOR IMPORTANCE RADAR ====================
+        const importanceCtx = document.getElementById('importanceChart').getContext('2d');
+        new Chart(importanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Price\nCompetitiveness', 'Delivery\nSpeed', 'Discounts &\nOffers', 'Product\nQuality'],
+                datasets: [
+                    {
+                        label: 'Students',
+                        data: [3.9, 3.5, 3.7, 4.2],
+                        borderColor: '#4f8cff',
+                        backgroundColor: 'rgba(79, 140, 255, 0.15)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#4f8cff',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Professionals',
+                        data: [3.4, 3.2, 3.5, 3.7],
+                        borderColor: '#ff8c42',
+                        backgroundColor: 'rgba(255, 140, 66, 0.15)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#ff8c42',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 12, weight: 600 }, padding: 16 }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: {
+                            stepSize: 1,
+                            color: '#6b6b8d',
+                            backdropColor: 'transparent',
+                            font: { size: 10 }
+                        },
+                        grid: { color: 'rgba(255,255,255,0.08)' },
+                        angleLines: { color: 'rgba(255,255,255,0.08)' },
+                        pointLabels: {
+                            color: '#a0a0c0',
+                            font: { size: 12, weight: 600 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // ==================== 6. AOV DISTRIBUTION ====================
+        const aovCtx = document.getElementById('aovChart').getContext('2d');
+        new Chart(aovCtx, {
+            type: 'bar',
+            data: {
+                labels: ['< ₹200', '₹200-500', '₹501-800', '₹801-1200', '> ₹1200'],
+                datasets: [{
+                    label: 'Users',
+                    data: [5, 22, 10, 3, 5],
+                    backgroundColor: [
+                        'rgba(0, 213, 255, 0.7)',
+                        'rgba(79, 140, 255, 0.7)',
+                        'rgba(123, 92, 255, 0.7)',
+                        'rgba(255, 107, 157, 0.7)',
+                        'rgba(255, 71, 87, 0.7)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 10,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#7b5cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 11, weight: 600 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false } }
+                }
+            }
+        });
+
+        // ==================== 7. FREQUENCY vs SPENDING (Bubble) ====================
+        const freqSpendCtx = document.getElementById('freqSpendChart').getContext('2d');
+        new Chart(freqSpendCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Daily', 'Weekly', 'Bi-Weekly', 'Monthly'],
+                datasets: [
+                    {
+                        label: '< ₹500',
+                        data: [0, 1, 1, 3],
+                        backgroundColor: 'rgba(0, 213, 255, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '₹500-1.5K',
+                        data: [2, 7, 5, 2],
+                        backgroundColor: 'rgba(79, 140, 255, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '₹1.5K-3K',
+                        data: [3, 5, 3, 2],
+                        backgroundColor: 'rgba(123, 92, 255, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '₹3K-5K',
+                        data: [2, 0, 1, 0],
+                        backgroundColor: 'rgba(255, 140, 66, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '> ₹5K',
+                        data: [2, 2, 1, 1],
+                        backgroundColor: 'rgba(255, 71, 87, 0.7)',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 11, weight: 600 }, padding: 16 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { font: { size: 13, weight: 600 } }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: { font: { size: 12 } },
+                        title: { display: true, text: 'Number of Users', color: '#a0a0c0', font: { size: 12, weight: 600 } }
+                    }
+                }
+            }
+        });
+
+        // ==================== 8. STUDENT vs PROFESSIONAL COMPARISON ====================
+        const compCtx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(compCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Avg NPS\n(out of 7)', 'Price\nImportance\n(out of 5)', 'Quality\nImportance\n(out of 5)', 'Speed\nImportance\n(out of 5)', 'Discount\nImportance\n(out of 5)'],
+                datasets: [
+                    {
+                        label: '👨‍🎓 Students',
+                        data: [5.2, 3.9, 4.2, 3.5, 3.7],
+                        backgroundColor: 'rgba(79, 140, 255, 0.7)',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    },
+                    {
+                        label: '👨‍💼 Professionals',
+                        data: [5.5, 3.4, 3.7, 3.2, 3.5],
+                        backgroundColor: 'rgba(255, 140, 66, 0.7)',
+                        borderColor: '#ff8c42',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 13, weight: 700 }, padding: 20 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11, weight: 600 }, maxRotation: 0 }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 7,
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // ==================== 9. SATISFACTION DISTRIBUTION ====================
+        const satCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Very Satisfied', 'Mostly Satisfied', 'Neutral', 'Not Satisfied'],
+                datasets: [{
+                    data: [10, 24, 12, 1],
+                    backgroundColor: ['#00e5a0', '#4f8cff', '#ffd700', '#ff4757'],
+                    borderWidth: 0,
+                    borderRadius: 6,
+                    spacing: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 12, weight: 600 }, padding: 14 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#00e5a0',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = ((context.parsed / total) * 100).toFixed(1);
+                                return ` ${context.label}: ${context.parsed} (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // ==================== 10. NPS BAR ====================
+        const npsCtx = document.getElementById('npsChart').getContext('2d');
+        new Chart(npsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7'],
+                datasets: [{
+                    label: 'Responses',
+                    data: [1, 0, 2, 6, 12, 12, 10],
+                    backgroundColor: [
+                        '#ff4757', '#ff4757', '#ff4757',
+                        '#ffd700', '#ffd700',
+                        '#00e5a0', '#00e5a0'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 14, weight: 700 } },
+                        title: { display: true, text: 'NPS Score (1-7)', color: '#6b6b8d', font: { size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // ==================== 11. APP BY OCCUPATION ====================
+        const appOccCtx = document.getElementById('appOccChart').getContext('2d');
+        new Chart(appOccCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Blinkit', 'Zepto', 'Instamart', 'Other/None'],
+                datasets: [
+                    {
+                        label: '👨‍🎓 Students',
+                        data: [13, 9, 1, 2],
+                        backgroundColor: 'rgba(79, 140, 255, 0.7)',
+                        borderRadius: 6
+                    },
+                    {
+                        label: '👨‍💼 Professionals',
+                        data: [11, 7, 2, 2],
+                        backgroundColor: 'rgba(255, 140, 66, 0.7)',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 12, weight: 600 }, padding: 16 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#4f8cff',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false } }
+                }
+            }
+        });
+
+        // ==================== 12. PAIN POINTS BY APP ====================
+        const painAppCtx = document.getElementById('painAppChart').getContext('2d');
+        new Chart(painAppCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Blinkit', 'Zepto', 'Instamart'],
+                datasets: [
+                    {
+                        label: 'High Prices',
+                        data: [8, 6, 1],
+                        backgroundColor: 'rgba(255, 71, 87, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Limited Availability',
+                        data: [10, 4, 1],
+                        backgroundColor: 'rgba(255, 215, 0, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Quality Issues',
+                        data: [2, 0, 2],
+                        backgroundColor: 'rgba(123, 92, 255, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Late Delivery',
+                        data: [2, 2, 0],
+                        backgroundColor: 'rgba(0, 213, 255, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Poor Service',
+                        data: [1, 1, 1],
+                        backgroundColor: 'rgba(160, 160, 192, 0.5)',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 11, weight: 600 }, padding: 12 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1a3e',
+                        borderColor: '#ff4757',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 14
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { font: { size: 13, weight: 700 } }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }
+                    }
+                }
+            }
+        });
+
+        // ==================== PAIN BAR ANIMATION ====================
+        function animatePainBars() {
+            document.querySelectorAll('.pain-bar-fill').forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                bar.style.width = width;
+            });
+        }
+
+        // Initial animation trigger
+        setTimeout(animatePainBars, 1000);
+
+        // ==================== FILTER FUNCTIONALITY ====================
+        function updateDashboard() {
+            const age = document.getElementById('filterAge').value;
+            const occ = document.getElementById('filterOccupation').value;
+            const app = document.getElementById('filterApp').value;
+
+            // Visual feedback
+            const kpiCards = document.querySelectorAll('.kpi-card');
+            kpiCards.forEach(card => {
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0.7';
+                setTimeout(() => {
+                    card.style.transform = '';
+                    card.style.opacity = '';
+                }, 300);
+            });
+
+            // Update KPI display text based on filters
+            const totalEl = document.getElementById('kpi-total');
+            const satEl = document.getElementById('kpi-sat');
+
+            if (age === '18-24') {
+                totalEl.textContent = '40';
+            } else if (age === '25-34') {
+                totalEl.textContent = '4';
+            } else {
+                totalEl.textContent = '47';
+            }
+
+            if (occ === 'student') {
+                totalEl.textContent = '25';
+                satEl.textContent = '68%';
+            } else if (occ === 'professional') {
+                totalEl.textContent = '22';
+                satEl.textContent = '77%';
+            } else {
+                satEl.textContent = '72%';
+            }
+
+            if (app === 'blinkit') {
+                document.getElementById('kpi-topapp').textContent = 'Blinkit';
+            } else if (app === 'zepto') {
+                document.getElementById('kpi-topapp').textContent = 'Zepto';
+            } else if (app === 'instamart') {
+                document.getElementById('kpi-topapp').textContent = 'Instamart';
+            } else {
+                document.getElementById('kpi-topapp').textContent = 'Blinkit';
+            }
+        }
+
+        // ==================== DOWNLOAD FUNCTION ====================
+        function downloadDashboard() {
+            // Create a summary report as downloadable text
+            const report = `
+╔══════════════════════════════════════════════════════════════╗
+║     QUICK COMMERCE CONSUMER BEHAVIOR REPORT (2024)          ║
+║     Primary Research Survey — 47 Respondents                ║
+╚══════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    KEY PERFORMANCE INDICATORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  📊 Total Respondents:      47
+  🏆 Most Used App:          Blinkit (51%)
+  📈 NPS Score:              +27
+  💰 Avg Monthly Spend:      ₹500 - ₹1,500 (modal)
+  😊 Satisfaction Rate:      72%
+  🎯 #1 Decision Factor:     Price (36%)
+  ⚠️  #1 Pain Point:         High Prices vs Local (38%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                      APP MARKET SHARE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Blinkit          ████████████████████████  24 (51.1%)
+  Zepto            ████████████████          16 (34.0%)
+  Instamart        ███                        3 ( 6.4%)
+  None             ██                         2 ( 4.3%)
+  Other            ██                         2 ( 4.3%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                   PRIMARY DECISION FACTORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Price of Products       █████████████████  17 (36.2%)
+  Variety/Availability    ████████████       12 (25.5%)
+  Offers & Discounts      ██████████         10 (21.3%)
+  Delivery Speed          ███████             7 (14.9%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                 MONTHLY SPENDING DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Less than ₹500          █████               5 (10.6%)
+  ₹500 - ₹1,500          ██████████████████  18 (38.3%)
+  ₹1,501 - ₹3,000        ███████████████     15 (31.9%)
+  ₹3,001 - ₹5,000        ███                  3 ( 6.4%)
+  More than ₹5,000        ██████               6 (12.8%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    CONSUMER PAIN POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  High prices vs local    ██████████████████  18 (38.3%)
+  Limited availability    ████████████████    16 (34.0%)
+  Product quality issues  █████                5 (10.6%)
+  Late delivery           █████                5 (10.6%)
+  Poor customer service   ███                  3 ( 6.4%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                       NPS BREAKDOWN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Promoters (6-7):     40%  ████████████████████
+  Passives  (4-5):     47%  ███████████████████████
+  Detractors (1-3):    13%  ██████
+
+  NPS Score = 40% - 13% = +27
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+              STUDENT vs WORKING PROFESSIONAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Metric              Students    Professionals
+  ──────────────────────────────────────────────
+  Count               25          22
+  Top App             Blinkit     Blinkit
+  Top Factor          Price       Variety/Speed
+  Typical AOV         ₹200-500    ₹501-800+
+  Monthly Spend       ₹500-1.5K   ₹1.5K-3K+
+  Avg NPS             5.2         5.5
+  Top Pain Point      Availability High Prices
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    CONSUMER SEGMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. 💰 Budget Hunters (~35%)
+     Students, price-driven, AOV <₹500, chase deals
+
+  2. ⚡ Convenience Maximizers (~25%)
+     Professionals, speed/variety-driven, AOV ₹200-800
+
+  3. 🌟 Quality Seekers (~15%)
+     Mixed, quality-focused, one bad experience = switch
+
+  4. 🛒 Power Shoppers (~12%)
+     25-44 age, daily users, AOV >₹800, highest CLV
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     KEY INSIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Blinkit dominates (51%) but Zepto closing fast (34%)
+  2. Price is #1 factor (36%) — speed is overrated (15%)
+  3. "Satisfied But Frustrated" paradox — 72% both ways
+  4. Kirana store is the real competitor, not other apps
+  5. Blinkit's expectation-reality gap on availability
+  6. Daily users are NOT homogeneous (6x spend variance)
+  7. Discounts drive bi-weekly users, not daily ones
+  8. Product quality is met expectation, not differentiator
+  9. 47% passive NPS users are the conversion battleground
+  10. 35+ age users are untapped high-ARPU segment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                 BUSINESS RECOMMENDATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FOR BLINKIT: Fix availability — users choose you for
+  variety but complain about stockouts. Implement real-time
+  inventory visibility.
+
+  FOR ZEPTO: Launch "Local Price Match" on 50 daily essentials.
+  Price within 5% of kirana. Recover margin on impulse adds.
+
+  FOR ALL: Micro-loyalty with streak rewards. Convert the
+  47% passive users to promoters through habit formation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Report Generated: ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+  Survey Period: April 2024
+  Sample Size: 47 respondents
+  Methodology: Primary Survey (Google Forms)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Quick_Commerce_Dashboard_Report_2024.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            // Also offer HTML download
+            setTimeout(() => {
+                if (confirm('📄 Text report downloaded!\n\nWould you also like to download the full interactive HTML dashboard?')) {
+                    const htmlContent = document.documentElement.outerHTML;
+                    const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+                    const htmlUrl = URL.createObjectURL(htmlBlob);
+                    const htmlA = document.createElement('a');
+                    htmlA.href = htmlUrl;
+                    htmlA.download = 'Quick_Commerce_Dashboard_2024.html';
+                    htmlA.click();
+                    URL.revokeObjectURL(htmlUrl);
+                }
+            }, 500);
+        }
+
+        // ==================== COUNTER ANIMATION ====================
+        function animateCounter(element, target, duration = 1500) {
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * eased);
+
+                if (element.textContent !== target.toString() && typeof target === 'number') {
+                    element.textContent = current;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target;
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // ==================== INTERSECTION OBSERVER ====================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.chart-card, .insight-card, .segment-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') switchTabByIndex(0);
+            if (e.key === '2') switchTabByIndex(1);
+            if (e.key === '3') switchTabByIndex(2);
+            if (e.key === '4') switchTabByIndex(3);
+            if (e.key === '5') switchTabByIndex(4);
+            if (e.key === 'd' || e.key === 'D') downloadDashboard();
+        });
+
+        function switchTabByIndex(index) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            if (tabs[index]) tabs[index].click();
+        }
+
+        // Initial load
+        console.log('🚀 Quick Commerce Dashboard Loaded Successfully');
+        console.log('⌨️ Keyboard shortcuts: 1-5 for tabs, D for download');
+    </script>
+</body>
+</html>
